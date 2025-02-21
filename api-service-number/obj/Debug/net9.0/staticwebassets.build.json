@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "Qk40M90RciTFL+IQCz3WiPW/OATJeFB/zwpfNRgQpVk=",
+  "Source": "api-service-number",
+  "BasePath": "_content/api-service-number",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

@@ -1,4 +1,5 @@
 using api_service_number.Context;
+using api_service_number.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,12 @@ builder.Services.AddOpenApi();
 
 string mySqlConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(p => p.UseMySql(mySqlConnectionString, ServerVersion.AutoDetect(mySqlConnectionString)));
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));   
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+
+
+
 
 var app = builder.Build();
 

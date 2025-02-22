@@ -13,11 +13,17 @@ public class TicketRepository : Repository<Ticket>, ITicketRepository
     
     public IQueryable<Ticket>? GetTicketsByStatus(Status status)
     {
-        return base.context.Tickets?.AsQueryable().Where(t => t.Status == status);
+        return context.Tickets?.AsQueryable().Where(t => t.Status == status);
     }
 
-    public IQueryable<Ticket>? GetTicketsByPriority(Priority priority)
+    public IQueryable<Ticket> GetTicketsByPriority(Priority priority)
     {
-        return base.context.Tickets?.AsQueryable().Where(t => t.Priority == priority);
+        return context.Tickets.AsQueryable().Where(t => t.Priority == priority);
     }
+    
+
+    /*public Ticket CancelTicket(Ticket ticket)
+    {
+        throw new NotImplementedException();
+    }*/
 }

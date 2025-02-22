@@ -15,13 +15,23 @@ public class Ticket
     public string? TicketNumber { get; set; }
     
     [Required]
-    [StringLength(20)]
     public Priority Priority { get; set; }
     
     [Required]
-    [StringLength(20)]
-    public Status Status { get; set; }
-    
-    public DateTime StartDate { get; set; }
+    public Status Status { get; set; } = Status.Active;
+
+    public DateTime StartDate { get; set; } = DateTime.UtcNow;
     public DateTime? EndDate { get; set; }
+
+
+    public Ticket()
+    {
+        
+    }
+
+    public Ticket(string ticketNumber ,Priority priority)
+    {
+        TicketNumber = ticketNumber;
+        Priority = priority;
+    }
 }

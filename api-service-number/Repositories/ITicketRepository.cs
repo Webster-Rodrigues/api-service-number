@@ -6,6 +6,7 @@ namespace api_service_number.Repositories;
 public interface ITicketRepository : IRepository<Ticket>
 {
     IQueryable<Ticket>? GetTicketsByStatus(Status status);
-    IQueryable<Ticket>? GetTicketsByPriority(Priority priority);
+    IQueryable<Ticket> GetTicketsByPriority(Priority priority);
+    
     
 }

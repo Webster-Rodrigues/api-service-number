@@ -1,4 +1,6 @@
 using api_service_number.Context;
+using api_service_number.Models;
+using api_service_number.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace api_service_number.Repositories;
@@ -12,10 +14,8 @@ public class Repository<T> :IRepository<T> where T : class
         this.context = context;
     }
     
-    
     public IEnumerable<T> GetAll()
     {
-        context.Tickets.Load();
        return context.Set<T>().AsNoTracking().ToList();
     }
 
@@ -23,19 +23,25 @@ public class Repository<T> :IRepository<T> where T : class
     {
         return context.Set<T>().Find(id);
     }
-
-    public T Add(T entity)
+    
+    public T Create(T entity)
     {
-        return context.Set<T>().Add(entity).Entity;
+        context.Set<T>().Add(entity);
+        context.SaveChanges();
+        return entity;
     }
 
     public T Update(T entity)
     {
-        return context.Set<T>().Update(entity).Entity;
+        context.Set<T>().Update(entity);
+        context.SaveChanges();
+        return entity;
     }
 
     public T Delete(T entity)
     {
-        return context.Set<T>().Remove(entity).Entity;
+        context.Set<T>().Remove(entity);
+        context.SaveChanges();
+        return entity;
     }
 }

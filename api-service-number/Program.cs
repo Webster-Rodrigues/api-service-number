@@ -1,5 +1,7 @@
 using System.Text.Json.Serialization;
 using api_service_number.Context;
+using api_service_number.Filters;
+using api_service_number.Logging;
 using api_service_number.Repositories;
 using api_service_number.Services;
 using Microsoft.EntityFrameworkCore;
@@ -7,11 +9,8 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    });
+builder.Services.AddControllers(option => option.Filters.Add(typeof(ApiExceptionFilter)))
+                    .AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
@@ -24,8 +23,10 @@ builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<TicketService>();
 
-
-
+builder.Logging.AddProvider(new CustomLoggerProvider(new CustomLoggerProviderConfiguration()
+{
+    LogLevel = LogLevel.Information
+}));
 
 
 var app = builder.Build();

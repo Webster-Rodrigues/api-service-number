@@ -7,6 +7,7 @@ public interface ITicketRepository : IRepository<Ticket>
 {
     IQueryable<Ticket>? GetTicketsByStatus(Status status);
     IQueryable<Ticket> GetTicketsByPriority(Priority priority);
+    Task<IEnumerable<Ticket>> GetExpiredTickets();
     
     
 }

@@ -1,6 +1,7 @@
 using api_service_number.Context;
 using api_service_number.Models;
 using api_service_number.Models.Models.Enum;
+using Microsoft.EntityFrameworkCore;
 
 namespace api_service_number.Repositories;
 
@@ -20,10 +21,14 @@ public class TicketRepository : Repository<Ticket>, ITicketRepository
     {
         return context.Tickets.AsQueryable().Where(t => t.Priority == priority);
     }
-    
 
-    /*public Ticket CancelTicket(Ticket ticket)
+    public async Task<IEnumerable<Ticket>> GetExpiredTickets()
     {
-        throw new NotImplementedException();
-    }*/
+        var limite = DateTime.UtcNow.AddMinutes(-2); 
+
+        return await context.Tickets
+            .Where(t => t.Status != Status.Finished && t.StartDate <= limite)
+            .ToListAsync();
+    }
+
 }

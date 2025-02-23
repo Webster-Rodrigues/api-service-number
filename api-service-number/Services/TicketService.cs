@@ -79,6 +79,19 @@ public class TicketService
         _repository.Update(ticket);
         return true;
     }
+
+    public async Task CancelTicket()
+    {
+        var expiredTickets = await _repository.GetExpiredTickets();
+
+        foreach (var ticket in expiredTickets)
+        {
+            ticket.Status = Status.Canceled;
+            ticket.EndDate = DateTime.Now;
+             await _repository.UpdateAsync(ticket);
+        }
+        
+    }
     
     
     

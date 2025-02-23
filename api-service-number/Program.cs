@@ -23,6 +23,9 @@ builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<TicketService>();
 
+builder.Services.AddHostedService<TicketCleanupService>();
+
+
 builder.Logging.AddProvider(new CustomLoggerProvider(new CustomLoggerProviderConfiguration()
 {
     LogLevel = LogLevel.Information

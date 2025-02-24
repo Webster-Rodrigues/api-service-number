@@ -101,7 +101,14 @@ public class TicketService : ITicketService
         
     }
     
-    
+    public IEnumerable<Ticket> GetAllSortedTickets()
+    {
+        var tickets = _repository.GetAll()
+            .OrderBy(ticket => (int)ticket.Priority)
+            .ThenBy(ticket => (int)ticket.Status); // Ordena por status (Ativo primeiro, Finalizado depois, Cancelado por último)
+
+        return tickets;
+    }
     
     
     

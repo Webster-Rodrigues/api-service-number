@@ -25,7 +25,7 @@ public class TicketController : Controller
     {
         _logger.LogInformation("[START] Executando Get-> /tickets | Retorna lista com todos os tickets");
         
-        var tickets = _ticketServiceservice.GetAll();
+        var tickets = _ticketServiceservice.GetAllSortedTickets().OrderBy(ticket => ticket.Priority);
         if (tickets == null)
         {
             _logger.LogInformation($"[NOT FOUND] Nenhum ticket encontrado");
@@ -34,7 +34,6 @@ public class TicketController : Controller
         _logger.LogInformation($"[SUCCESS] tickets encontrados!");
         return Ok(tickets);
     }
-
     
     [HttpGet("{id}")]
     public ActionResult<Ticket> GetId(int id)
@@ -90,13 +89,15 @@ public class TicketController : Controller
     public async Task<ActionResult<Ticket>> Post([FromQuery] Priority priority)
     {
         _logger.LogInformation($"[START] Executando Post -> /tickets | Cria um ticket a partir da prioridade = {priority}");
-        
+
         var ipAddress = Request.Headers["X-Forwarded-For"].FirstOrDefault() ?? HttpContext.Connection.RemoteIpAddress?.ToString();
         
         //var geolocation = await _geolocationService.GetGeolocationAsync(ipAddress);
         
         var geolocation = await _geolocationService.GetGeolocationAsync("89.248.169.10"); //Única alternativa para testes locais
-        _logger.LogInformation($"IP Detectado: {ipAddress}"); //Testando a captura do ID para saber se está capturando 
+        _logger.LogInformation($"IP Detectado: {ipAddress}"); //Testando a captura do IP para saber se está capturando 
+
+
 
         if (geolocation == null)
         {
@@ -162,6 +163,7 @@ public class TicketController : Controller
         _logger.LogInformation($"[SUCCESS] Ticket de ID{id} finalizado com sucesso");
         return NoContent();
     }
+    
     
     
 }

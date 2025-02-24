@@ -13,4 +13,6 @@ public interface ITicketService
     Ticket Update(Ticket ticket);
     Ticket Delete(Ticket ticket);
     bool CloseTicket(int id);
+    IEnumerable<Ticket> GetAllSortedTickets();
+
 }

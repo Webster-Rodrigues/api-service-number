@@ -9,19 +9,19 @@ namespace api_service_number.Controllers;
 [ApiController]
 public class TicketController : Controller
 {
-    private readonly TicketService _ticketServiceservice;
+    private readonly ITicketService _ticketServiceservice;
     private readonly ILogger _logger;
     private readonly GeolocationService _geolocationService;
 
-    public TicketController(TicketService ticketServiceservice, ILogger<TicketController> logger, GeolocationService geolocationService)
+    public TicketController(ITicketService ticketServiceservice, ILogger<TicketController> logger, GeolocationService geolocationService)
     {
-        _ticketServiceservice = ticketServiceservice;
+        this._ticketServiceservice = ticketServiceservice;
         _logger = logger;
         _geolocationService = geolocationService;
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Ticket>> Get()
+    public ActionResult<IEnumerable<Ticket>> GetAll()
     {
         _logger.LogInformation("[START] Executando Get-> /tickets | Retorna lista com todos os tickets");
         
@@ -113,7 +113,7 @@ public class TicketController : Controller
         
         _logger.LogInformation($"[SUCCESS] Ticket criado com sucesso");
         //Corrige o 200
-        return CreatedAtAction(nameof(Get), new { id = ticket.Id }, ticket); 
+        return CreatedAtAction(nameof(GetAll), new { id = ticket.Id }, ticket); 
 
     }
 
@@ -162,7 +162,6 @@ public class TicketController : Controller
         _logger.LogInformation($"[SUCCESS] Ticket de ID{id} finalizado com sucesso");
         return NoContent();
     }
-
     
     
 }

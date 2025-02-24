@@ -1,5 +1,5 @@
 
-using api_service_number.Models.Models.Enum;
+using api_service_number.Models;
 using Newtonsoft.Json;
 
 namespace api_service_number.Services;
@@ -7,7 +7,7 @@ namespace api_service_number.Services;
 public class GeolocationService
 {
     private readonly HttpClient _httpClient;
-    //private readonly ILogger<GeolocationService> _logger;
+    private readonly ILogger<GeolocationService> _logger;
 
     public GeolocationService(HttpClient httpClient)
     {
@@ -16,11 +16,10 @@ public class GeolocationService
 
     public async Task<GeoLocationDTO?> GetGeolocationAsync(string ip)
     {
+        _logger.LogInformation("[START] GeolocationService]");
         string url = $"http://ip-api.com/json/{ip}";
         
-
         var response = await _httpClient.GetStringAsync(url);
-
         return JsonConvert.DeserializeObject<GeoLocationDTO>(response);
          
     }

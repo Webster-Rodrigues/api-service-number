@@ -32,6 +32,7 @@ builder.Services.AddHttpClient<GeolocationService>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<TicketService>();
+builder.Services.AddScoped<ITicketService, TicketService>();
 
 
 

@@ -1,6 +1,4 @@
-using System.ComponentModel.DataAnnotations;
-
-namespace api_service_number.Models.Models.Enum;
+namespace api_service_number.Models;
 
 public class GeoLocationDTO
 {

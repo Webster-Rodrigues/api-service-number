@@ -11,11 +11,13 @@ public class TicketController : Controller
 {
     private readonly TicketService _ticketServiceservice;
     private readonly ILogger _logger;
+    private readonly GeolocationService _geolocationService;
 
-    public TicketController(TicketService ticketServiceservice, ILogger<TicketController> logger)
+    public TicketController(TicketService ticketServiceservice, ILogger<TicketController> logger, GeolocationService geolocationService)
     {
         _ticketServiceservice = ticketServiceservice;
         _logger = logger;
+        _geolocationService = geolocationService;
     }
 
     [HttpGet]
@@ -85,11 +87,24 @@ public class TicketController : Controller
 
     
     [HttpPost]
-    public ActionResult<Ticket> Post([FromQuery] Priority priority)
+    public async Task<ActionResult<Ticket>> Post([FromQuery] Priority priority)
     {
         _logger.LogInformation($"[START] Executando Post -> /tickets | Cria um ticket a partir da prioridade = {priority}");
         
-        var ticket = _ticketServiceservice.Create(priority);
+        var ipAddress = Request.Headers["X-Forwarded-For"].FirstOrDefault() ?? HttpContext.Connection.RemoteIpAddress?.ToString();
+        
+        //var geolocation = await _geolocationService.GetGeolocationAsync(ipAddress);
+        
+        var geolocation = await _geolocationService.GetGeolocationAsync("89.248.169.10"); //Única alternativa para testes locais
+        _logger.LogInformation($"IP Detectado: {ipAddress}"); //Testando a captura do ID para saber se está capturando 
+
+        if (geolocation == null)
+        {
+            _logger.LogWarning("[ERROR] Falha ao obter geolocalização.");
+            return StatusCode(500, "Erro ao obter geolocalização.");
+        }
+        
+        var ticket = await _ticketServiceservice.Create(priority,geolocation);
         if (ticket == null)
         {
             _logger.LogWarning($"[BAD REQUEST] Não foi possível criar o ticket para a prioridade = {priority}. Dados inválidos ou falta de informação.");
@@ -146,6 +161,8 @@ public class TicketController : Controller
         }
         _logger.LogInformation($"[SUCCESS] Ticket de ID{id} finalizado com sucesso");
         return NoContent();
-
     }
+
+    
+    
 }

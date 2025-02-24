@@ -22,8 +22,9 @@ public class Ticket
 
     public DateTime StartDate { get; set; } = DateTime.UtcNow;
     public DateTime? EndDate { get; set; }
-
-
+    
+   public string? GeoLocation { get; set; }
+    
     public Ticket()
     {
         

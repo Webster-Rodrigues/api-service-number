@@ -10,16 +10,17 @@ public class AppDbContext : DbContext
     { }
     
     public DbSet<Ticket>? Tickets { get; set; }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    
+    protected override void OnModelCreating(ModelBuilder mb)
     {
-        base.OnModelCreating(modelBuilder);
+        base.OnModelCreating(mb);
         
-        modelBuilder.Entity<Ticket>().Property(p => p.Priority).HasConversion(c => c.ToString(),
+        mb.Entity<Ticket>().Property(p => p.Priority).HasConversion(c => c.ToString(),
             c => (Priority)Enum.Parse(typeof(Priority), c));
         
-        modelBuilder.Entity<Ticket>().Property(p => p.Status).HasConversion(c => c.ToString(),
+        mb.Entity<Ticket>().Property(p => p.Status).HasConversion(c => c.ToString(),
             c => (Status)Enum.Parse(typeof(Status), c));
+        
     }
     
 }

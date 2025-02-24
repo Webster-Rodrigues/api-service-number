@@ -11,4 +11,5 @@ public interface IRepository<T>
     T Update(T entity);
     T Delete(T entity);
     Task<T> UpdateAsync(T entity);
+    Task<T> CreateAsync(T entity);
 }

@@ -51,4 +51,11 @@ public class Repository<T> :IRepository<T> where T : class
         await context.SaveChangesAsync(); 
         return entity;
     }
+
+    public async Task<T> CreateAsync(T entity)
+    {
+        context.Set<T>().Add(entity);
+        await context.SaveChangesAsync();
+        return entity;
+    }
 }

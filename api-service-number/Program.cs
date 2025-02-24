@@ -12,6 +12,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers(option => option.Filters.Add(typeof(ApiExceptionFilter)))
                     .AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
 
+static IHostBuilder CreateHostBuilder(string[] args) =>
+    Host.CreateDefaultBuilder(args)
+        .ConfigureServices((hostContext, services) =>
+        {
+            services.AddHttpClient<GeolocationService>(); // Registra o GeolocationService
+            // Outros serviços
+        });
+
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddOpenApi();
@@ -19,9 +28,12 @@ builder.Services.AddOpenApi();
 string? mySqlConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(p => p.UseMySql(mySqlConnectionString, ServerVersion.AutoDetect(mySqlConnectionString)));
 
+builder.Services.AddHttpClient<GeolocationService>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<TicketService>();
+
+
 
 builder.Services.AddHostedService<TicketCleanupService>();
 

@@ -12,8 +12,8 @@ using api_service_number.Context;
 namespace api_service_number.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250221033034_PopulaTbl")]
-    partial class PopulaTbl
+    [Migration("20250224000244_MigracaoInicial")]
+    partial class MigracaoInicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,18 +36,20 @@ namespace api_service_number.Migrations
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("GeoLocation")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Priority")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("TicketNumber")
                         .IsRequired()

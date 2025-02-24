@@ -12,8 +12,8 @@ using api_service_number.Context;
 namespace api_service_number.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250221023520_MigracaoInicial")]
-    partial class MigracaoInicial
+    [Migration("20250224000445_MigracaoAjuste")]
+    partial class MigracaoAjuste
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,17 +33,23 @@ namespace api_service_number.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("EndDate")
+                    b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
+                    b.Property<string>("GeoLocation")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Priority")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("TicketNumber")
                         .IsRequired()

@@ -1,6 +1,7 @@
 using api_service_number.Models;
 using api_service_number.Models.Models.Enum;
 using api_service_number.Repositories;
+using Newtonsoft.Json;
 
 
 namespace api_service_number.Services;
@@ -35,7 +36,33 @@ public class TicketService
         return _repository.GetTicketsByStatus(status);
     }
 
-    public Ticket Create(Priority priority)
+    public async Task<Ticket> Create(Priority priority, GeoLocationDTO geolocation)
+    {
+        var prefix = priority.ToString().Substring(0, 3).ToUpper();
+        
+        var lastTicket = _repository.GetAll().Where(t => t.Priority == priority)
+            .OrderByDescending(t => t.TicketNumber).FirstOrDefault();
+
+        int numberLastTicket = 1;
+        if (lastTicket != null)
+        {
+            string lastTicketNumber = lastTicket.TicketNumber.Substring(3);
+
+            if (int.TryParse(lastTicketNumber, out int lastNumber)) //TryParse tenta converter. Corrige o bug de conversão 
+            {
+                numberLastTicket = lastNumber + 1;
+            }
+        }
+        var serialNumber = $"{prefix}{numberLastTicket:D3}";
+        
+        
+        var ticket = new Ticket(serialNumber , priority);
+        ticket.GeoLocation = JsonConvert.SerializeObject(geolocation);
+        await _repository.CreateAsync(ticket);
+        return ticket;
+    }
+    
+    /*public Ticket Create(Priority priority)
     {
         var prefix = priority.ToString().Substring(0, 3).ToUpper();
         
@@ -56,7 +83,7 @@ public class TicketService
         var serialNumber = $"{prefix}{numberLastTicket:D3}";
         var ticket = new Ticket(serialNumber , priority);
         return _repository.Create(ticket);
-    }
+    }*/
 
     public Ticket Update(Ticket ticket)
     {
